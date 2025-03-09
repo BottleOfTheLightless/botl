@@ -1,0 +1,25 @@
+<div class="navbar bg-base-100 relative flex">
+  <div class="navbar-start flex-1">
+    <a class="btn btn-untextured btn-ghost text-xl relative" [routerLink]="['/game']" appAnalyticsClick="Game:Home">
+      Bottle of the Lightless
+
+      @if(meta.versionMismatch()) {
+      <button class="btn btn-xs btn-primary absolute update-button" (click)="meta.update()"
+        appAnalyticsClick="Meta:Update:Click">Update Available!</button>
+      }
+    </a>
+
+    @if(isSetup()) {
+    <div class="navbar-end">
+      <ul class="menu menu-horizontal px-1">
+
+        <li class="mr-1">
+          <a [routerLink]="['/game/options']" [routerLinkActive]="'text-primary'" appAnalyticsClick="Game:Settings">
+            <ng-icon name="tablerSettings"></ng-icon>
+          </a>
+        </li>
+      </ul>
+    </div>
+    }
+
+  </div>
