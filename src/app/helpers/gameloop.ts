@@ -1,10 +1,10 @@
+import { isSetup } from './setup';
 import {
   blankGameState,
   isGameStateReady,
   setGameState,
   updateGamestate,
-} from './gamestate';
-import { isSetup } from './setup';
+} from './state-game';
 
 export function isPlayingGame(): boolean {
   return window.location.href.includes('/game');

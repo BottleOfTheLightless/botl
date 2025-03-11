@@ -1,16 +1,4 @@
-export type ResearchableContentType = 'damagetype' | 'archetype' | 'task';
-
-export type ContentType =
-  | ResearchableContentType
-  | 'resource'
-  | 'item'
-  | 'research'
-  | 'upgrade'
-  | 'dungeon'
-  | 'monster'
-  | 'loot'
-  | 'attribute'
-  | 'skill';
+export type ContentType = 'hero';
 
 export interface Identifiable {
   id: string;
@@ -18,5 +6,6 @@ export interface Identifiable {
 }
 
 export interface Content extends Identifiable {
+  defaultUnlocked?: boolean;
   __type: ContentType;
 }

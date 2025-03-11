@@ -1,17 +1,31 @@
-<div class="flex justify-center items-center page-size">
+<div class="flex justify-center items-center p-2 gap-2 xl:flex-row lg:flex-col sm:flex-col md:flex-col">
 
-  <div class="card card-side bg-base-100 shadow-xl min-h-[300px] max-h-[500px] w-1/2">
+  <div class="card bg-base-100 w-1/2">
 
     <div class="card-body items-center justify-between">
       <div class="card-title text-center flex flex-col">
-        Start a New Run
+        Your Unlocked Characters
+      </div>
+
+      <div class="flex flex-wrap">
+        @for(hero of allCharacters(); track $index) {
+        <app-hero-headicon [heroName]="hero.headshotImageName"></app-hero-headicon>
+        }
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card bg-base-100 w-1/2">
+
+    <div class="card-body items-center justify-between">
+      <div class="card-title text-center flex flex-col">
+        Choose Your Team
       </div>
 
       <div class="card-actions pt-3">
         <button class="btn btn-primary btn-wide" (click)="play()" [disabled]="!canSubmit()"
           appAnalyticsClick="Setup:Play">Play</button>
-
-        <app-savefile-import></app-savefile-import>
       </div>
     </div>
 

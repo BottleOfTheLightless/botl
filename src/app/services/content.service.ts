@@ -1,5 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { computed, inject, Injectable, signal } from '@angular/core';
+import {
+  computed,
+  inject,
+  Injectable,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { forkJoin } from 'rxjs';
 import {
   allContentById,
@@ -17,12 +23,71 @@ export class ContentService {
   private metaService = inject(MetaService);
   private http = inject(HttpClient);
 
-  public hasLoaded = computed(() => this.hasLoadedData());
+  private artSignals: Array<WritableSignal<boolean>> = [];
+  public artImages = signal<Record<string, HTMLImageElement>>({});
+  private hasLoadedArt = computed(() => this.artSignals.every((s) => s()));
+  private hasLoadedAtlases = signal<boolean>(false);
+
+  public artAtlases = signal<
+    Record<
+      string,
+      Record<string, { x: number; y: number; width: number; height: number }>
+    >
+  >({});
+
+  public hasLoaded = computed(
+    () =>
+      this.hasLoadedArt() && this.hasLoadedData() && this.hasLoadedAtlases(),
+  );
 
   private hasLoadedData = signal<boolean>(false);
 
   async init() {
     this.loadJSON();
+    this.loadArt();
+  }
+
+  private loadArt() {
+    const spritesheetsToLoad = [
+      'card-skill',
+      'item-accessory',
+      'item-weapon',
+      'map-node',
+      'picker-hero',
+    ];
+
+    forkJoin(
+      spritesheetsToLoad.map((s) =>
+        this.http.get(`./art/spritesheets/${s}.json`),
+      ),
+    ).subscribe((allAtlases) => {
+      const atlasesByName = spritesheetsToLoad.reduce(
+        (prev, cur, idx) => ({
+          ...prev,
+          [cur]: allAtlases[idx],
+        }),
+        {},
+      );
+
+      this.artAtlases.set(atlasesByName);
+      this.hasLoadedAtlases.set(true);
+    });
+
+    this.artSignals = spritesheetsToLoad.map(() => signal<boolean>(false));
+
+    const artImageHash: Record<string, HTMLImageElement> = {};
+
+    spritesheetsToLoad.forEach((sheet, idx) => {
+      const img = new Image();
+      img.src = `art/spritesheets/${sheet}.png`;
+      this.artSignals[idx].set(false);
+      img.onload = async () => {
+        artImageHash[sheet] = img;
+
+        this.artImages.set(artImageHash);
+        this.artSignals[idx].set(true);
+      };
+    });
   }
 
   private toJSONURL(key: string): string {
@@ -30,14 +95,14 @@ export class ContentService {
   }
 
   private loadJSON() {
-    forkJoin({}).subscribe((assets) => {
+    forkJoin({
+      hero: this.http.get(this.toJSONURL('hero')),
+    }).subscribe((assets) => {
       this.unfurlAssets(assets as unknown as Record<string, Content[]>);
 
       console.log('[Content] Content loaded.');
       this.hasLoadedData.set(true);
     });
-
-    forkJoin({});
   }
 
   private unfurlAssets(assets: Record<string, Content[]>) {

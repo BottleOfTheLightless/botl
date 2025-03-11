@@ -1,6 +1,6 @@
 import { signal } from '@angular/core';
 import { Subject } from 'rxjs';
-import { gamestate } from './gamestate';
+import { gamestate } from './state-game';
 
 export const canSendNotifications = signal<boolean>(false);
 

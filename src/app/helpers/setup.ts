@@ -1,4 +1,4 @@
-import { gamestate, setGameState } from './gamestate';
+import { gamestate, setGameState } from './state-game';
 
 export function isSetup(): boolean {
   const state = gamestate();

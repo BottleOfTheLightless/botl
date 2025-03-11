@@ -13,18 +13,20 @@ export class AnalyticsService {
   private analytics: typeof gameanalytics.GameAnalytics;
 
   init() {
-    this.analytics = gameanalytics.GameAnalytics;
-    this.analytics.configureBuild(
-      `${environment.platform} ${this.metaService.versionString()}`,
-    );
-    this.analytics.initialize(
-      environment.gameanalytics.game,
-      environment.gameanalytics.secret,
-    );
+    if (environment.gameanalytics.game && environment.gameanalytics.secret) {
+      this.analytics = gameanalytics.GameAnalytics;
+      this.analytics.configureBuild(
+        `${environment.platform} ${this.metaService.versionString()}`,
+      );
+      this.analytics.initialize(
+        environment.gameanalytics.game,
+        environment.gameanalytics.secret,
+      );
 
-    analyticsEvent$.subscribe(({ event, value }) => {
-      this.sendDesignEvent(event, value ?? 1);
-    });
+      analyticsEvent$.subscribe(({ event, value }) => {
+        this.sendDesignEvent(event, value ?? 1);
+      });
+    }
   }
 
   sendDesignEvent(eventId: string, value: number = 0) {
