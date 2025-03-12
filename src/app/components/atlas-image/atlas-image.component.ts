@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, computed, inject, input } from '@angular/core';
 import { ContentService } from '../../services/content.service';
 
@@ -10,7 +11,7 @@ type AtlasedImage =
 
 @Component({
   selector: 'app-atlas-image',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './atlas-image.component.html',
   styleUrl: './atlas-image.component.scss',
 })
@@ -19,6 +20,7 @@ export class AtlasImageComponent {
 
   public spritesheet = input.required<AtlasedImage>();
   public assetName = input.required<string>();
+  public cssClass = input<string>();
 
   public assetUrl = computed(
     () => `art/spritesheets/${this.spritesheet()}.png`,

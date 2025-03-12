@@ -12,10 +12,14 @@
 
           <div class="flex flex-wrap gap-2">
             @for(data of allCharacters()[category]; track $index) {
-            <app-hero-headicon [heroName]="data.hero.headshotImageName" [class.opacity-50]="!data.unlocked"
-              [class.cursor-pointer]="data.unlocked" [class.cursor-not-allowed]="!data.unlocked"
-              [ngClass]="[`class-${category}`]" (click)="activeCharacter.set(data.hero)" [dndDraggable]="data.hero"
-              [dndDisableIf]="!data.unlocked" (dndStart)="activeCharacter.set(data.hero)"></app-hero-headicon>
+            <div tabindex="0" (keyup.enter)="setActiveHero(data.hero)" (click)="setActiveHero(data.hero)"
+              [dndDraggable]="data.hero" [dndDisableIf]="!data.unlocked" (dndStart)="setActiveHero(data.hero)">
+              <div dndDragImageRef>
+                <app-hero-headicon [hero]="data.hero" [class.opacity-50]="!data.unlocked"
+                  [class.cursor-pointer]="data.unlocked" [class.cursor-not-allowed]="!data.unlocked">
+                </app-hero-headicon>
+              </div>
+            </div>
             }
           </div>
         </div>
@@ -36,21 +40,20 @@
 
         <div class="flex flex-row justify-center gap-2">
           @for(chosen of chosenCharacters(); track $index) {
-          @if(!chosen) {
           <div class="character-slot" [class.empty]="!chosen" dndDropzone
             (dndDrop)="chooseCharacter($event.data, $index)">
+            @if(!chosen) {
             <app-icon name="tablerPlus" size="3em"></app-icon>
+            } @else {
+            <app-hero-headicon [hero]="chosen" (click)="setActiveHero(chosen)"></app-hero-headicon>
+            }
           </div>
-          } @else {
-          <app-hero-headicon [heroName]="chosen.headshotImageName"
-            [ngClass]="[`class-${chosen.subtype ? 'Hybrid' : chosen.type}`]" dndDropzone
-            (dndDrop)="chooseCharacter($event.data, $index)" (click)="activeCharacter.set(chosen)"></app-hero-headicon>
-          }
           }
         </div>
 
         <div class="card-actions pt-3">
-          <button class="btn btn-primary btn-wide" (click)="play()" [disabled]="!hasEnoughCharacters()"
+          <button class="btn btn-wide" [class.btn-primary]="hasEnoughCharacters()"
+            [class.btn-default]="!hasEnoughCharacters()" (click)="play()" [disabled]="!hasEnoughCharacters()"
             appAnalyticsClick="Setup:Play">Play</button>
         </div>
       </div>
@@ -67,8 +70,7 @@
 
         <div class="mt-3 flex flex-row justify-between w-full">
           <div class="flex-1 flex justify-start gap-2">
-            <app-hero-headicon [heroName]="activeHero.headshotImageName"
-              [ngClass]="[`class-${activeHero.subtype ? 'Hybrid' : activeHero.type}`]"></app-hero-headicon>
+            <app-hero-headicon [hero]="activeHero"></app-hero-headicon>
 
             <div class="text-lg">
               <div class="flex items-center gap-2">

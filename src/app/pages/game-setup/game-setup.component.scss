@@ -1,7 +1,7 @@
 .character-slot {
   &.empty {
-    width: 132px;
-    height: 132px;
+    width: 128px;
+    height: 128px;
 
     @apply flex justify-center items-center;
     @apply border-gray-100 border-2;

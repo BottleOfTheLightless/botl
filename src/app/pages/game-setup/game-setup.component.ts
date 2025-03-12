@@ -62,6 +62,10 @@ export class GameSetupComponent implements OnInit {
     });
   }
 
+  public setActiveHero(hero: IHero) {
+    this.activeCharacter.set(hero);
+  }
+
   public chooseCharacter(hero: IHero, slot: number) {
     const duplicateSlot = this.chosenCharacters().findIndex(
       (c) => c?.id === hero.id,

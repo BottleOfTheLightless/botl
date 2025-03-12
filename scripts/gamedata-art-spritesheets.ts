@@ -12,7 +12,12 @@ const spritesheetsToBuild = [
   'picker-hero',
 ];
 
-const assetsToCopy = ['map-background', 'sheet-enemy', 'sheet-hero'];
+const assetsToCopy = [
+  'map-background',
+  'sheet-enemy',
+  'sheet-hero',
+  'picker-hero',
+];
 
 fs.ensureDirSync('public/art/spritesheets');
 
