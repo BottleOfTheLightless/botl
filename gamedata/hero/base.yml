@@ -10,6 +10,9 @@
   description: >
     Aspen Koga is a skilled martial artist who has been training since she was a child. She is a master of hand-to-hand combat and is known for her speed and agility. Aspen is a fierce warrior who will stop at nothing to protect her friends and family.
 
+  stats:
+    hp: 80
+
 - id: c8c469a1-f100-4c62-8f17-0eeb030d7c09
 
   name: Eden Genevieve
@@ -20,6 +23,9 @@
 
   description: >
     Eden Genevieve is a happy-go-lucky adventurer who loves exploring new places and meeting new people. She loves nature and is quick on her feet. Eden is always ready for a new challenge and is known for her positive attitude and infectious smile.
+
+  stats:
+    hp: 70
 
 - id: 81eb3435-7ebb-4460-b67b-270325ebb4e4
 
@@ -33,6 +39,9 @@
   description: >
     Grysel Lorne is a powerful mage who has mastered the elements of light and dark. Her morals are as mysterious as her personality. Grysel is a force to be reckoned with and is known for her cunning and intelligence.
 
+  stats:
+    hp: 60
+
 - id: 6609489e-5142-436f-bca4-0d262e8a8a87
 
   name: Hana Kiyoko
@@ -43,6 +52,9 @@
 
   description: >
     Hana Kiyoko hails from the cold north, and has mastered the art of ice magic. Her intelligence and wit are matched only by her skill in battle.
+
+  stats:
+    hp: 75
 
 - id: 246b4f8b-b687-402a-bac8-c51769aa764c
 
@@ -56,6 +68,9 @@
   description: >
     Lana Elaine is a talented warrior, known for using axes. She is strong and fearless, and is always ready to take on any challenge.
 
+  stats:
+    hp: 100
+
 - id: 454a70c8-95aa-40a2-a268-de823ec406f3
 
   name: Morcene Lysander
@@ -66,6 +81,9 @@
 
   description: >
     Morcene Lysander has a mysterious past and is known for his dark and brooding personality. She always has a companion dog named Koala by her side.
+
+  stats:
+    hp: 80
 
 - id: 6bec3f32-e750-44b3-8bbb-20180f394811
 
@@ -78,6 +96,9 @@
   description: >
     Nalia Kael is a skilled archer who is known for her accuracy and precision. Her accuracy is only comparable to her tenacity and determination.
 
+  stats:
+    hp: 75
+
 - id: f53117d6-319e-4ddc-90d9-cd3f95a4351b
 
   name: Neo Erina
@@ -88,6 +109,9 @@
 
   description: >
     Neo Erina is talented with electronics and technology. She is a skilled hacker and is known for her quick thinking and resourcefulness.
+
+  stats:
+    hp: 70
 
 - id: 9f86e675-ec1c-4d63-8b70-6e58f62a75d6
 
@@ -101,6 +125,9 @@
   description: >
     Soen Maelstrom is a powerful healer who has mastered the art of healing magic. She is known for her kindness and compassion, and is always willing to help those in need.
 
+  stats:
+    hp: 70
+
 - id: f643fbaa-c678-4f34-833d-e0e6a83651fc
 
   name: Valerie Messelstig
@@ -112,13 +139,20 @@
   description: >
     Valerie Messelstig is a shield expert known for her resilience. Her shield is said to be unbreakable.
 
+  stats:
+    hp: 95
+
 - id: cbe7ef2c-c48e-4a45-b4b1-e57257fed904
 
   name: Zoe Callista
   type: Defender
+  subtype: Caster
 
   headshotImageName: Zoe
   spritesheetImageName: Zoe
 
   description: >
     Zoe Callista is a powerful defensive caster known for mastering ice shields. She is known for her calm and collected demeanor.
+
+  stats:
+    hp: 80

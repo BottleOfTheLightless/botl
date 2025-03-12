@@ -2,11 +2,17 @@
   bottom: -20px;
 }
 
-.resource-list {
-  bottom: -10px;
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
+
+  padding-top: 0;
 }
 
-.navbar-start, .navbar-end {
+.navbar-start,
+.navbar-end {
   width: auto;
 }

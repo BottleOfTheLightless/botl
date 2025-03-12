@@ -1,4 +1,3 @@
-import { NgOptimizedImage } from '@angular/common';
 import { Component, computed, inject, input } from '@angular/core';
 import { ContentService } from '../../services/content.service';
 
@@ -11,7 +10,7 @@ type AtlasedImage =
 
 @Component({
   selector: 'app-atlas-image',
-  imports: [NgOptimizedImage],
+  imports: [],
   templateUrl: './atlas-image.component.html',
   styleUrl: './atlas-image.component.scss',
 })

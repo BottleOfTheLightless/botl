@@ -1,34 +1,97 @@
-<div class="flex justify-center items-center p-2 gap-2 xl:flex-row lg:flex-col sm:flex-col md:flex-col">
+<div class="flex mt-6 p-2 gap-2 xl:flex-row lg:flex-col sm:flex-col md:flex-col">
 
-  <div class="card bg-base-100 w-1/2">
+  <div class="card bg-base-100 xl:w-1/2">
 
-    <div class="card-body items-center justify-between">
-      <div class="card-title text-center flex flex-col">
-        Your Unlocked Characters
-      </div>
+    <div class="card-body justify-between">
+      <div class="card-title text-center flex flex-col"></div>
 
       <div class="flex flex-wrap">
-        @for(hero of allCharacters(); track $index) {
-        <app-hero-headicon [heroName]="hero.headshotImageName"></app-hero-headicon>
+        @for(category of characterCategories; track $index) {
+        <div class="my-3 w-1/2">
+          <header class="text-xl font-bold mb-3">{{ category }}</header>
+
+          <div class="flex flex-wrap gap-2">
+            @for(data of allCharacters()[category]; track $index) {
+            <app-hero-headicon [heroName]="data.hero.headshotImageName" [class.opacity-50]="!data.unlocked"
+              [class.cursor-pointer]="data.unlocked" [class.cursor-not-allowed]="!data.unlocked"
+              [ngClass]="[`class-${category}`]" (click)="activeCharacter.set(data.hero)" [dndDraggable]="data.hero"
+              [dndDisableIf]="!data.unlocked" (dndStart)="activeCharacter.set(data.hero)"></app-hero-headicon>
+            }
+          </div>
+        </div>
         }
       </div>
     </div>
 
   </div>
 
-  <div class="card bg-base-100 w-1/2">
+  <div class="xl:w-1/2">
 
-    <div class="card-body items-center justify-between">
-      <div class="card-title text-center flex flex-col">
-        Choose Your Team
+    <div class="card bg-base-100">
+
+      <div class="card-body items-center justify-between">
+        <div class="card-title text-center flex flex-col">
+          Choose Your Team
+        </div>
+
+        <div class="flex flex-row justify-center gap-2">
+          @for(chosen of chosenCharacters(); track $index) {
+          @if(!chosen) {
+          <div class="character-slot" [class.empty]="!chosen" dndDropzone
+            (dndDrop)="chooseCharacter($event.data, $index)">
+            <app-icon name="tablerPlus" size="3em"></app-icon>
+          </div>
+          } @else {
+          <app-hero-headicon [heroName]="chosen.headshotImageName"
+            [ngClass]="[`class-${chosen.subtype ? 'Hybrid' : chosen.type}`]" dndDropzone
+            (dndDrop)="chooseCharacter($event.data, $index)" (click)="activeCharacter.set(chosen)"></app-hero-headicon>
+          }
+          }
+        </div>
+
+        <div class="card-actions pt-3">
+          <button class="btn btn-primary btn-wide" (click)="play()" [disabled]="!hasEnoughCharacters()"
+            appAnalyticsClick="Setup:Play">Play</button>
+        </div>
       </div>
 
-      <div class="card-actions pt-3">
-        <button class="btn btn-primary btn-wide" (click)="play()" [disabled]="!canSubmit()"
-          appAnalyticsClick="Setup:Play">Play</button>
-      </div>
     </div>
 
+    @if(activeCharacter(); as activeHero) {
+    <div class="card bg-base-100 mt-4">
+
+      <div class="card-body items-center justify-between">
+        <div class="card-title text-center flex flex-col">
+          {{ activeHero.name }}
+        </div>
+
+        <div class="mt-3 flex flex-row justify-between w-full">
+          <div class="flex-1 flex justify-start gap-2">
+            <app-hero-headicon [heroName]="activeHero.headshotImageName"
+              [ngClass]="[`class-${activeHero.subtype ? 'Hybrid' : activeHero.type}`]"></app-hero-headicon>
+
+            <div class="text-lg">
+              <div class="flex items-center gap-2">
+                <app-icon name="gameHearts" color="#a00" size="1.1em"></app-icon> {{ activeHero.stats.hp }} HP
+              </div>
+
+              <div>
+                {{ activeHero.type }}
+                @if(activeHero.subtype) {
+                / {{ activeHero.subtype }}
+                }
+              </div>
+            </div>
+          </div>
+
+          <div class="flex-1">
+            {{ activeHero.description }}
+          </div>
+        </div>
+      </div>
+
+    </div>
+    }
   </div>
 
 </div>

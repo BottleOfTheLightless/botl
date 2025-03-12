@@ -23,6 +23,10 @@ export function updateUnlockState(
   setUnlockState(newState);
 }
 
+export function isUnlocked(type: ContentType, id: string): boolean {
+  return unlockstate()[type][id];
+}
+
 export function unlockDefaultItems() {
   const allContents = allContentById();
 

@@ -1,4 +1,6 @@
 @let asset = specificAsset();
 
-<img [src]="assetUrl()" [alt]="assetName()" [style.width]="asset.width" [style.height]="asset.height"
-  [style.object-position]="" />
+<div [style.max-width.px]="asset.width" [style.max-height.px]="asset.height" class="relative overflow-hidden">
+  <img [src]="assetUrl()" [alt]="assetName()" [style.width.px]="asset.width" [style.height.px]="asset.height"
+    [style.object-position]="`-${asset.x}px -${asset.y}px`" />
+</div>

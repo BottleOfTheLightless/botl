@@ -1,24 +1,18 @@
-import { Component, computed, inject } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
-import { NgIconComponent } from '@ng-icons/core';
-import { AnalyticsClickDirective } from '../../directives/analytics-click.directive';
-import { isSetup } from '../../helpers';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { TippyDirective } from '@ngneat/helipopper';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { MetaService } from '../../services/meta.service';
+import { IconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'app-navbar',
-  imports: [
-    RouterLink,
-    RouterLinkActive,
-    NgIconComponent,
-    AnalyticsClickDirective,
-  ],
+  imports: [RouterLink, TippyDirective, IconComponent, SweetAlert2Module],
   providers: [],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })
 export class NavbarComponent {
   public meta = inject(MetaService);
-
-  isSetup = computed(() => isSetup());
+  public router = inject(Router);
 }

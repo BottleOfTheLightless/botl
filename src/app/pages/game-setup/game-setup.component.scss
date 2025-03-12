@@ -1,0 +1,10 @@
+.character-slot {
+  &.empty {
+    width: 132px;
+    height: 132px;
+
+    @apply flex justify-center items-center;
+    @apply border-gray-100 border-2;
+    @apply bg-gray-500;
+  }
+}
