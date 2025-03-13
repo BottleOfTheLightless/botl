@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { IHero } from '../../interfaces';
+import { IHeroDefinition } from '../../interfaces';
 import { AtlasImageComponent } from '../atlas-image/atlas-image.component';
 
 @Component({
@@ -9,7 +9,7 @@ import { AtlasImageComponent } from '../atlas-image/atlas-image.component';
   styleUrl: './hero-headicon.component.scss',
 })
 export class HeroHeadiconComponent {
-  public hero = input.required<IHero>();
+  public hero = input.required<IHeroDefinition>();
 
   public heroClass = computed(() =>
     this.hero().subtype ? 'Hybrid' : this.hero().type,

@@ -6,7 +6,7 @@ export interface HeroStats {
   hp: number;
 }
 
-export interface IHero extends Identifiable {
+export interface IHeroDefinition extends Identifiable {
   name: string;
   description: string;
 
@@ -20,3 +20,5 @@ export interface IHero extends Identifiable {
 
   stats: HeroStats;
 }
+
+export interface IHeroPlayer extends IHeroDefinition {}

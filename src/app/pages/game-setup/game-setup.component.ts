@@ -8,7 +8,7 @@ import { HeroHeadiconComponent } from '../../components/hero-headicon/hero-headi
 import { IconComponent } from '../../components/icon/icon.component';
 import { AnalyticsClickDirective } from '../../directives/analytics-click.directive';
 import { getEntriesByType, isUnlocked, setDiscordStatus } from '../../helpers';
-import { IHero } from '../../interfaces';
+import { IHeroDefinition } from '../../interfaces';
 
 @Component({
   selector: 'app-game-setup',
@@ -37,7 +37,7 @@ export class GameSetupComponent implements OnInit {
 
   public allCharacters = computed(() =>
     groupBy(
-      getEntriesByType<IHero>('hero').map((c) => ({
+      getEntriesByType<IHeroDefinition>('hero').map((c) => ({
         hero: c,
         unlocked: isUnlocked('hero', c.id),
       })),
@@ -45,7 +45,7 @@ export class GameSetupComponent implements OnInit {
     ),
   );
 
-  public chosenCharacters = signal<(IHero | undefined)[]>([
+  public chosenCharacters = signal<(IHeroDefinition | undefined)[]>([
     undefined,
     undefined,
     undefined,
@@ -54,7 +54,7 @@ export class GameSetupComponent implements OnInit {
 
   public hasEnoughCharacters = signal<boolean>(false);
 
-  public activeCharacter = signal<IHero | undefined>(undefined);
+  public activeCharacter = signal<IHeroDefinition | undefined>(undefined);
 
   ngOnInit() {
     setDiscordStatus({
@@ -62,11 +62,11 @@ export class GameSetupComponent implements OnInit {
     });
   }
 
-  public setActiveHero(hero: IHero) {
+  public setActiveHero(hero: IHeroDefinition) {
     this.activeCharacter.set(hero);
   }
 
-  public chooseCharacter(hero: IHero, slot: number) {
+  public chooseCharacter(hero: IHeroDefinition, slot: number) {
     const duplicateSlot = this.chosenCharacters().findIndex(
       (c) => c?.id === hero.id,
     );
@@ -88,6 +88,10 @@ export class GameSetupComponent implements OnInit {
   public play() {
     if (!this.hasEnoughCharacters()) return;
 
-    this.router.navigate(['/game']);
+    this.router.navigate(['/transition'], {
+      queryParams: {
+        transitionTo: 'game',
+      },
+    });
   }
 }
