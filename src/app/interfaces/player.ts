@@ -1,1 +1,1 @@
-export interface INetworkPlayer {}
+export interface NetworkPlayer {}

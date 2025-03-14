@@ -24,14 +24,7 @@
       </p>
 
       <div class="card-actions pb-10 mt-3">
-        @if(hasStartedGame()) {
-        <button class="btn btn-primary" [routerLink]="['/game']" appAnalyticsClick="Meta:Play:Return">Play</button>
-        }
-
-        @else {
-        <button class="btn btn-primary" [routerLink]="['/game/setup']" appAnalyticsClick="Meta:Play:New">Get
-          Started</button>
-        }
+        <button class="btn btn-primary" [routerLink]="['/setup']" appAnalyticsClick="Meta:Play:New">Play</button>
       </div>
 
       <div class="card-actions absolute bottom-0 left-0 right-0 p-2">

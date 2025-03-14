@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { GameComponent } from './pages/game/game.component';
 import { HomeComponent } from './pages/home/home.component';
+import { SetupComponent } from './pages/setup/setup.component';
 import { TransitionComponent } from './pages/transition/transition.component';
 
 export const routes: Routes = [
@@ -13,7 +13,13 @@ export const routes: Routes = [
     path: 'transition',
   },
   {
-    component: GameComponent,
+    component: SetupComponent,
+    path: 'setup',
+    loadChildren: () =>
+      import('./setup.routes').then((routes) => routes.setupRoutes),
+  },
+  {
+    component: SetupComponent,
     path: 'game',
     loadChildren: () =>
       import('./game.routes').then((routes) => routes.gameRoutes),

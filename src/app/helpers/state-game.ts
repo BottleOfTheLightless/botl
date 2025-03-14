@@ -6,10 +6,9 @@ export function blankGameState(): GameState {
   return {
     meta: {
       version: 1,
-      isPaused: false,
-      createdAt: Date.now(),
-      numTicks: 0,
     },
+    activeGameSlot: 0,
+    activeGames: [],
   };
 }
 

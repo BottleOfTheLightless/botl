@@ -9,3 +9,9 @@ export interface Content extends Identifiable {
   defaultUnlocked?: boolean;
   __type: ContentType;
 }
+
+declare const __brand: unique symbol;
+
+export type Branded<T, K> = T & {
+  readonly [__brand]: K;
+};

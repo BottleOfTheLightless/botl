@@ -1,0 +1,50 @@
+<div class="flex justify-center items-center h-full p-2 gap-2 xl:flex-row lg:flex-row sm:flex-col md:flex-col flex-col">
+
+  <div class="xl:w-1/2 w-full">
+    <div class="card bg-base-100 h-[300px]">
+
+      <div class="card-body justify-between">
+        <div class="card-title text-center flex flex-col">
+          Single Player
+        </div>
+
+        <div class="flex flex-row justify-center gap-2">
+          Start a classic single player run.
+        </div>
+
+        <div class="card-actions pt-3 flex justify-center">
+          <button class="btn btn-wide btn-primary" appAnalyticsClick="Setup:Play:1P"
+            [routerLink]="['/setup/characters']" [queryParams]="{ players: 1 }">Start</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="xl:w-1/2 w-full">
+
+    <div class="card bg-base-100 h-[300px]">
+
+      <div class="card-body items-center justify-between">
+        <div class="card-title text-center flex flex-col">
+          Co-op Multiplayer
+        </div>
+
+        <div class="flex flex-row justify-center gap-2">
+          Start an online multiplayer lobby to play co-op with your friends. Or mortal enemies. As long as you save the
+          kingdom.
+        </div>
+
+        <div class="card-actions pt-3 flex flex-row gap-2">
+          <button class="btn btn-primary" [disabled]="true" appAnalyticsClick="Setup:Play:2P"
+            [routerLink]="['/setup/characters']" [queryParams]="{ players: 2 }">2 Players</button>
+          <button class="btn btn-primary" [disabled]="true" appAnalyticsClick="Setup:Play:3P"
+            [routerLink]="['/setup/characters']" [queryParams]="{ players: 3 }">3 Players</button>
+          <button class="btn btn-primary" [disabled]="true" appAnalyticsClick="Setup:Play:4P"
+            [routerLink]="['/setup/characters']" [queryParams]="{ players: 4 }">4 Players</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

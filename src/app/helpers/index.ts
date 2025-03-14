@@ -2,6 +2,7 @@ export * from './analytics';
 export * from './content';
 export * from './discord';
 export * from './gameloop';
+export * from './icons';
 export * from './migrate';
 export * from './notify';
 export * from './rng';

@@ -1,5 +1,6 @@
 .page-container {
-  max-height: calc(100vh - 64px);
+  height: 100vh;
+  max-height: 100vh;
 
   @apply overflow-y-auto overflow-x-hidden;
 }

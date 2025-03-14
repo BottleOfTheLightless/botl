@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ICommand, IHeroPlayer, INetworkPlayer } from '../interfaces';
+import { Command, HeroPlayer, NetworkPlayer } from '../interfaces';
 
 type PlayerId = 1 | 2 | 3 | 4;
 
@@ -7,13 +7,13 @@ type PlayerId = 1 | 2 | 3 | 4;
   providedIn: 'root',
 })
 export class InputService {
-  public playerMap: Record<PlayerId, INetworkPlayer | undefined> = {
+  public playerMap: Record<PlayerId, NetworkPlayer | undefined> = {
     1: undefined,
     2: undefined,
     3: undefined,
     4: undefined,
   };
-  public playerControllingHeroes: Record<PlayerId, IHeroPlayer | undefined> = {
+  public playerControllingHeroes: Record<PlayerId, HeroPlayer | undefined> = {
     1: undefined,
     2: undefined,
     3: undefined,
@@ -22,16 +22,13 @@ export class InputService {
 
   public registerPlayer(
     playerId: PlayerId,
-    player: INetworkPlayer,
-    hero: IHeroPlayer,
+    player: NetworkPlayer,
+    hero: HeroPlayer,
   ) {}
 
-  public handleInput(playerId: PlayerId, command: ICommand) {}
+  public handleInput(playerId: PlayerId, command: Command) {}
 
-  public sendInput(playerId: PlayerId, command: ICommand) {}
+  public sendInput(playerId: PlayerId, command: Command) {}
 
-  public convertCommandFromPlayerToHero(
-    playerId: PlayerId,
-    command: ICommand,
-  ) {}
+  public convertCommandFromPlayerToHero(playerId: PlayerId, command: Command) {}
 }

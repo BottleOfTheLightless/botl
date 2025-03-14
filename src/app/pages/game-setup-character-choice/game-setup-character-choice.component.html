@@ -8,7 +8,11 @@
       <div class="flex flex-wrap">
         @for(category of characterCategories; track $index) {
         <div class="my-3 w-1/2">
-          <header class="text-xl font-bold mb-3">{{ category }}</header>
+          <header class="text-xl font-bold mb-3 flex items-center gap-2" [ngClass]="[`text-${category}`]">
+            <app-class-icon [className]="category"></app-class-icon>
+
+            {{ category }}
+          </header>
 
           <div class="flex flex-wrap gap-2">
             @for(data of allCharacters()[category]; track $index) {
@@ -77,8 +81,9 @@
                 <app-icon name="gameHearts" color="#a00" size="1.1em"></app-icon> {{ activeHero.stats.hp }} HP
               </div>
 
-              <div>
-                {{ activeHero.type }}
+              <div class="flex items-center gap-2">
+                <app-class-icon [className]="activeHero.subtype ? 'Hybrid' : activeHero.type"></app-class-icon> {{
+                activeHero.type }}
                 @if(activeHero.subtype) {
                 / {{ activeHero.subtype }}
                 }

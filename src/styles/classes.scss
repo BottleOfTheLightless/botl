@@ -15,4 +15,8 @@ $classColorMap: (
     @apply bg-#{map.get($classColorMap, $class)}-500;
     @apply border-2 border-#{map.get($classColorMap, $class)}-500;
   }
+
+  .text-#{$class} {
+    @apply text-#{map.get($classColorMap, $class)}-500;
+  }
 }

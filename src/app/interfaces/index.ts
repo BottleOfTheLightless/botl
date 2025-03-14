@@ -2,6 +2,7 @@ export * from './command';
 export * from './discord';
 export * from './hero';
 export * from './identifiable';
+export * from './map';
 export * from './player';
 export * from './state-game';
 export * from './state-options';

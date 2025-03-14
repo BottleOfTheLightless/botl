@@ -1,4 +1,4 @@
-export interface IDiscordPresenceOpts {
+export interface DiscordPresenceOpts {
   state?: string;
   details?: string;
   smallImageKey?: string;
