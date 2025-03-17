@@ -1,14 +1,17 @@
 import { Signal, signal, WritableSignal } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { GameState } from '../interfaces';
+import { uuid } from './rng';
 
 export function blankGameState(): GameState {
   return {
     meta: {
       version: 1,
+      playerId: uuid(),
     },
     activeGameSlot: 0,
     activeGames: [],
+    heroProgress: {},
   };
 }
 

@@ -2,13 +2,18 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { groupBy } from 'lodash';
+import { groupBy, sampleSize } from 'lodash';
 import { DndModule } from 'ngx-drag-drop';
 import { ClassIconComponent } from '../../components/class-icon/class-icon.component';
 import { HeroHeadiconComponent } from '../../components/hero-headicon/hero-headicon.component';
 import { IconComponent } from '../../components/icon/icon.component';
 import { AnalyticsClickDirective } from '../../directives/analytics-click.directive';
-import { getEntriesByType, isUnlocked, setDiscordStatus } from '../../helpers';
+import {
+  getEntriesByType,
+  isUnlocked,
+  setDiscordStatus,
+  startGame,
+} from '../../helpers';
 import { HeroDefinition, HeroType } from '../../interfaces';
 
 @Component({
@@ -48,6 +53,12 @@ export class GameSetupCharacterChoiceComponent implements OnInit {
   public hasEnoughCharacters = signal<boolean>(false);
   public activeCharacter = signal<HeroDefinition | undefined>(undefined);
 
+  public availableCharacters = computed(() =>
+    getEntriesByType<HeroDefinition>('hero').filter((c) =>
+      isUnlocked('hero', c.id),
+    ),
+  );
+
   public allCharacters = computed(() =>
     groupBy(
       getEntriesByType<HeroDefinition>('hero').map((c) => ({
@@ -65,6 +76,13 @@ export class GameSetupCharacterChoiceComponent implements OnInit {
 
     setDiscordStatus({
       state: 'Starting a new run...',
+    });
+  }
+
+  public makeRandomTeam() {
+    const chosenCharacters = sampleSize(this.availableCharacters(), 4);
+    chosenCharacters.forEach((c, i) => {
+      this.chooseCharacter(c, i);
     });
   }
 
@@ -94,7 +112,14 @@ export class GameSetupCharacterChoiceComponent implements OnInit {
   public play() {
     if (!this.hasEnoughCharacters()) return;
 
-    // TODO: setup game, create a gamestate, add the players, when loading, load the players into the input controller, put the game id localstorage if one is currently being played (clear when going to main menu)
+    startGame({
+      slot: 0,
+      heroes: [],
+    });
+
+    // TODO: add the players, when loading, put the game id localstorage if one is currently being played (clear when going to main menu)
+    // TODO: add resume game option
+    // TODO: hook into the input service
 
     this.router.navigate(['/transition'], {
       queryParams: {

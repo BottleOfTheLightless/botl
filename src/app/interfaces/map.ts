@@ -1,4 +1,4 @@
-type TiledMapNodeType = 'Start' | 'Any' | 'Town' | 'Treasure' | 'Boss';
+export type TiledMapNodeType = 'Start' | 'Any' | 'Town' | 'Treasure' | 'Boss';
 
 export interface TiledMap {
   width: number;
@@ -6,6 +6,7 @@ export interface TiledMap {
   tilewidth: number;
   tileheight: number;
   layers: TiledLayer[];
+  properties: TiledProperty[];
 }
 
 export interface TiledLayer {
@@ -19,10 +20,10 @@ export interface TiledMapNode {
   type: TiledMapNodeType;
   x: number;
   y: number;
-  properties: TiledMapNodeProperty[];
+  properties: TiledProperty[];
 }
 
-export interface TiledMapNodeProperty {
+export interface TiledProperty {
   name: string;
-  value: number;
+  value: number | string;
 }

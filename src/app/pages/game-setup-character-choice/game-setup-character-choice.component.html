@@ -55,7 +55,11 @@
           }
         </div>
 
-        <div class="card-actions pt-3">
+        <div class="card-actions pt-3 w-full flex flex-row justify-center gap-2">
+          @if(playerCount() === 1) {
+          <button class="btn btn-wide btn-secondary" (click)="makeRandomTeam()">Random Team</button>
+          }
+
           <button class="btn btn-wide" [class.btn-primary]="hasEnoughCharacters()"
             [class.btn-default]="!hasEnoughCharacters()" (click)="play()" [disabled]="!hasEnoughCharacters()"
             appAnalyticsClick="Setup:Play">Play</button>

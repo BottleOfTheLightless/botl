@@ -1,13 +1,13 @@
 import seedrandom, { type PRNG } from 'seedrandom';
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid4 } from 'uuid';
 import { Identifiable } from '../interfaces';
 
-export function uniqueId(): string {
-  return uuid();
+export function uuid(): string {
+  return uuid4();
 }
 
 export function randomrng(): PRNG {
-  return seededrng(uniqueId());
+  return seededrng(uuid());
 }
 
 export function seededrng(seed: string): PRNG {
@@ -22,15 +22,15 @@ export function randomIdentifiableChoice<T extends Identifiable>(
   return choices[Math.floor(rng() * choices.length)].id;
 }
 
-export function randomNumber(max: number, seed = uniqueId()): number {
+export function randomNumber(max: number, seed = uuid()): number {
   return Math.floor(seededrng(seed)() * max);
 }
 
-export function succeedsChance(max: number, seed = uniqueId()): boolean {
+export function succeedsChance(max: number, seed = uuid()): boolean {
   return seededrng(seed)() * 100 <= max;
 }
 
-export function randomChoice<T>(choices: T[], seed = uniqueId()): T {
+export function randomChoice<T>(choices: T[], seed = uuid()): T {
   const rng = seededrng(seed);
 
   // throw away the first 2 rng values. who needs 'em anyway?

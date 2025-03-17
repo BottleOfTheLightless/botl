@@ -536,6 +536,12 @@
  "nextlayerid":4,
  "nextobjectid":50,
  "orientation":"orthogonal",
+ "properties":[
+        {
+         "name":"isAct1",
+         "type":"bool",
+         "value":true
+        }],
  "renderorder":"right-down",
  "tiledversion":"1.11.2",
  "tileheight":64,

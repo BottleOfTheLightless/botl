@@ -48,6 +48,7 @@ export class GamestateService {
       if (!this.hasLoaded()) return;
 
       const state = gamestate();
+      console.log(state);
 
       if (getOption('debugConsoleLogStateUpdates')) {
         console.info('[State Update]', state);

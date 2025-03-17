@@ -24,6 +24,11 @@ export interface HeroDefinition extends Identifiable {
   stats: HeroStats;
 }
 
+export interface HeroProgress {}
+
 export interface HeroPlayer extends HeroDefinition {
   controlledBy: string;
+  progress: HeroProgress;
+
+  hp: number;
 }

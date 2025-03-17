@@ -1,27 +1,26 @@
 import { signal, Signal, WritableSignal } from '@angular/core';
-import { cloneDeep } from 'lodash';
 import { Content, ContentType } from '../interfaces';
 
-const _allIdsByName: WritableSignal<Record<string, string>> = signal({});
-export const allIdsByName: Signal<Record<string, string>> =
+const _allIdsByName: WritableSignal<Map<string, string>> = signal(new Map());
+export const allIdsByName: Signal<Map<string, string>> =
   _allIdsByName.asReadonly();
 
-const _allContentById: WritableSignal<Record<string, Content>> = signal({});
-export const allContentById: Signal<Record<string, Content>> =
+const _allContentById: WritableSignal<Map<string, Content>> = signal(new Map());
+export const allContentById: Signal<Map<string, Content>> =
   _allContentById.asReadonly();
 
-export function setAllIdsByName(state: Record<string, string>): void {
-  _allIdsByName.set(cloneDeep(state));
+export function setAllIdsByName(state: Map<string, string>): void {
+  _allIdsByName.set(new Map(state));
 }
 
-export function setAllContentById(state: Record<string, Content>): void {
-  _allContentById.set(cloneDeep(state));
+export function setAllContentById(state: Map<string, Content>): void {
+  _allContentById.set(new Map(state));
 }
 
 export function getEntriesByType<T>(type: ContentType): T[] {
-  return Object.values(allContentById()).filter(
-    (entry) => entry.__type === type,
-  ) as T[];
+  return [...allContentById()]
+    .filter(([_, entry]) => entry.__type === type)
+    .map((e) => e[1]) as T[];
 }
 
 export function getEntry<T extends Content>(
@@ -32,10 +31,11 @@ export function getEntry<T extends Content>(
   const idHash = allIdsByName();
   const entriesHash = allContentById();
 
-  let ret: T = entriesHash[entryIdOrName] as T;
+  let ret: T = entriesHash.get(entryIdOrName) as T;
 
-  if (idHash[entryIdOrName]) {
-    ret = entriesHash[idHash[entryIdOrName]] as T;
+  const nameToId = idHash.get(entryIdOrName);
+  if (nameToId) {
+    ret = entriesHash.get(nameToId) as T;
   }
 
   return ret;

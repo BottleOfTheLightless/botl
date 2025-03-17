@@ -12,8 +12,9 @@ import {
   allIdsByName,
   setAllContentById,
   setAllIdsByName,
+  setAllMapsByName,
 } from '../helpers';
-import { Content, ContentType } from '../interfaces';
+import { Content, ContentType, TiledMap } from '../interfaces';
 import { MetaService } from './meta.service';
 
 @Injectable({
@@ -27,6 +28,7 @@ export class ContentService {
   public artImages = signal<Record<string, HTMLImageElement>>({});
   private hasLoadedArt = computed(() => this.artSignals.every((s) => s()));
   private hasLoadedAtlases = signal<boolean>(false);
+  private hasLoadedMaps = signal<boolean>(false);
 
   public artAtlases = signal<
     Record<
@@ -37,14 +39,26 @@ export class ContentService {
 
   public hasLoaded = computed(
     () =>
-      this.hasLoadedArt() && this.hasLoadedData() && this.hasLoadedAtlases(),
+      this.hasLoadedArt() &&
+      this.hasLoadedData() &&
+      this.hasLoadedAtlases() &&
+      this.hasLoadedMaps(),
   );
 
   private hasLoadedData = signal<boolean>(false);
 
   async init() {
     this.loadJSON();
+    this.loadMaps();
     this.loadArt();
+  }
+
+  private toCacheBustURL(url: string): string {
+    return `${url}?v=${this.metaService.versionString()}`;
+  }
+
+  private toJSONURL(key: string): string {
+    return this.toCacheBustURL(`./json/${key}.json`);
   }
 
   private loadArt() {
@@ -58,7 +72,7 @@ export class ContentService {
 
     forkJoin(
       spritesheetsToLoad.map((s) =>
-        this.http.get(`./art/spritesheets/${s}.json`),
+        this.http.get(this.toCacheBustURL(`./art/spritesheets/${s}.json`)),
       ),
     ).subscribe((allAtlases) => {
       const atlasesByName = spritesheetsToLoad.reduce(
@@ -90,8 +104,31 @@ export class ContentService {
     });
   }
 
-  private toJSONURL(key: string): string {
-    return `./json/${key}.json?v=${this.metaService.versionString()}`;
+  private loadMaps() {
+    this.http.get(this.toJSONURL('maps')).subscribe((maps) => {
+      const allMaps = maps as string[];
+
+      forkJoin(
+        allMaps.map((map) =>
+          this.http.get(this.toCacheBustURL(`./maps/${map}.json`)),
+        ),
+      ).subscribe((mapDatas) => {
+        const maps = new Map<string, TiledMap>();
+        const allMapDatas = mapDatas as TiledMap[];
+
+        allMapDatas.forEach((mapData, idx) => {
+          mapData.properties.unshift({
+            name: 'name',
+            value: allMaps[idx],
+          });
+          maps.set(allMaps[idx], mapData);
+        });
+
+        console.log('[Content] Maps loaded.');
+        setAllMapsByName(maps);
+        this.hasLoadedMaps.set(true);
+      });
+    });
   }
 
   private loadJSON() {
@@ -106,32 +143,34 @@ export class ContentService {
   }
 
   private unfurlAssets(assets: Record<string, Content[]>) {
-    const allIdsByNameAssets: Record<string, string> = allIdsByName();
-    const allEntriesByIdAssets: Record<string, Content> = allContentById();
+    const allIdsByNameAssets: Map<string, string> = allIdsByName();
+    const allEntriesByIdAssets: Map<string, Content> = allContentById();
 
     Object.keys(assets).forEach((subtype) => {
       Object.values(assets[subtype]).forEach((entry) => {
         entry.__type = subtype as ContentType;
 
-        if (allIdsByNameAssets[entry.name]) {
+        if (allIdsByNameAssets.has(entry.name)) {
           console.warn(
-            `[Content] "${entry.name}/${entry.id}" is a duplicate name to "${
-              allIdsByNameAssets[entry.name]
-            }". Skipping...`,
+            `[Content] "${entry.name}/${
+              entry.id
+            }" is a duplicate name to "${allIdsByNameAssets.get(
+              entry.name,
+            )}". Skipping...`,
           );
           return;
         }
 
-        if (allEntriesByIdAssets[entry.id]) {
-          const dupe = allEntriesByIdAssets[entry.id];
+        const dupe = allEntriesByIdAssets.get(entry.id);
+        if (dupe) {
           console.warn(
             `[Content] "${entry.name}/${entry.id}" is a duplicate id to "${dupe.name}/${dupe.id}". Skipping...`,
           );
           return;
         }
 
-        allIdsByNameAssets[entry.name] = entry.id;
-        allEntriesByIdAssets[entry.id] = entry;
+        allIdsByNameAssets.set(entry.name, entry.id);
+        allEntriesByIdAssets.set(entry.id, entry);
       });
     });
 
