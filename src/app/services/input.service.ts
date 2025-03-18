@@ -31,7 +31,12 @@ export class InputService {
     effect(() => {
       const isContentLoaded = this.contentService.hasLoaded();
       const game = currentGame();
-      if (!game || !isContentLoaded || this.hasRegisteredPlayers()) return;
+      if (!game) {
+        this.clearPlayers();
+        return;
+      }
+
+      if (!isContentLoaded || this.hasRegisteredPlayers()) return;
 
       game.heroes.forEach((hero, index) => {
         this.registerPlayer(index as PlayerSlot, hero.controlledBy, hero);
@@ -46,6 +51,8 @@ export class InputService {
   }
 
   public clearPlayers() {
+    this.logger.debug(`Input`, `Unregistering all player inputs.`);
+
     this.slotToPlayerId = {
       0: undefined,
       1: undefined,
@@ -69,7 +76,7 @@ export class InputService {
     this.slotToPlayerId[playerSlot] = playerId;
     this.slotToPlayerData[playerSlot] = hero;
 
-    this.logger.info(
+    this.logger.debug(
       `Input`,
       `Player ${playerId} registered in slot ${playerSlot} as ${hero.name}`,
     );
@@ -77,12 +84,12 @@ export class InputService {
 
   // handle receiving an input from a player, possibly over a network
   public handleInput(playerId: PlayerId, command: Command) {
-    this.logger.info(`Input`, `Received command from ${playerId}`, command);
+    this.logger.debug(`Input`, `Received command from ${playerId}`, command);
   }
 
   // handle sending an input to a player, possibly over a network
   public sendInput(playerId: PlayerId, command: Command) {
-    this.logger.info(`Input`, `Sending command from ${playerId}`, command);
+    this.logger.debug(`Input`, `Sending command from ${playerId}`, command);
   }
 
   public convertCommandFromPlayerToHero(playerId: PlayerId, command: Command) {

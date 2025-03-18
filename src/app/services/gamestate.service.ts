@@ -31,7 +31,7 @@ export class GamestateService {
   constructor() {
     effect(() => {
       if (!this.contentService.hasLoaded() || this.hasLoaded()) return;
-      this.logger.log('GameState', 'Migrating gamestate...');
+      this.logger.info('GameState', 'Migrating gamestate...');
 
       migrateGameState();
       migrateOptionsState();
@@ -39,7 +39,7 @@ export class GamestateService {
 
       unlockDefaultItems();
 
-      this.logger.log('GameState', 'Gamestate migrated & loaded.');
+      this.logger.info('GameState', 'Gamestate migrated & loaded.');
       this.hasLoaded.set(true);
       isGameStateReady.set(true);
     });

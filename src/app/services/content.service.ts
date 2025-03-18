@@ -126,7 +126,7 @@ export class ContentService {
           maps.set(allMaps[idx], mapData);
         });
 
-        this.logger.log('Content', 'Map JSONs loaded.');
+        this.logger.info('Content', 'Map JSONs loaded.');
         setAllMapsByName(maps);
         this.hasLoadedMaps.set(true);
       });
@@ -144,7 +144,7 @@ export class ContentService {
     forkJoin(jsonMaps).subscribe((assets) => {
       this.unfurlAssets(assets as unknown as Record<string, Content[]>);
 
-      this.logger.log('Content', 'Content loaded.');
+      this.logger.info('Content', 'Content loaded.');
       this.hasLoadedData.set(true);
     });
   }
@@ -158,8 +158,9 @@ export class ContentService {
         entry.__type = subtype as ContentType;
 
         if (allIdsByNameAssets.has(entry.name)) {
-          console.warn(
-            `[Content] "${entry.name}/${
+          this.logger.warn(
+            'Content',
+            `"${entry.name}/${
               entry.id
             }" is a duplicate name to "${allIdsByNameAssets.get(
               entry.name,
@@ -170,8 +171,9 @@ export class ContentService {
 
         const dupe = allEntriesByIdAssets.get(entry.id);
         if (dupe) {
-          console.warn(
-            `[Content] "${entry.name}/${entry.id}" is a duplicate id to "${dupe.name}/${dupe.id}". Skipping...`,
+          this.logger.warn(
+            'Content',
+            `"${entry.name}/${entry.id}" is a duplicate id to "${dupe.name}/${dupe.id}". Skipping...`,
           );
           return;
         }

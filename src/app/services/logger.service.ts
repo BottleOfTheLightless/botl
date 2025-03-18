@@ -5,14 +5,12 @@ import { color } from 'console-log-colors';
 import { cloneDeep } from 'lodash';
 import Rollbar from 'rollbar';
 import { environment } from '../../environments/environment';
-import { MetaService } from './meta.service';
+import { localVersion, versionInfoToSemver } from '../helpers';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoggerService {
-  private metaService = inject(MetaService);
-
   private rollbar!: Rollbar;
 
   private readonly ignoredMessageSubstrings: string[] = [
@@ -32,10 +30,13 @@ export class LoggerService {
 
   init() {
     if (environment.rollbar.accessToken) {
-      const realVersion = this.metaService.versionString();
-
       const rollbarConfig = cloneDeep(environment.rollbar);
-      rollbarConfig.payload.client.javascript.code_version = realVersion;
+
+      const realVersion = localVersion();
+      if (realVersion) {
+        rollbarConfig.payload.client.javascript.code_version =
+          versionInfoToSemver(realVersion) ?? 'unknown';
+      }
 
       this.rollbar = new Rollbar({
         ...rollbarConfig,
@@ -50,7 +51,7 @@ export class LoggerService {
   }
 
   private _logMessage(
-    level: 'debug' | 'error' | 'log' | 'info',
+    level: 'debug' | 'error' | 'log' | 'info' | 'warn',
     category: string,
     ...data: any
   ) {
@@ -58,6 +59,7 @@ export class LoggerService {
       debug: 'gray',
       error: 'red',
       log: 'magenta',
+      warn: 'yellow',
       info: 'blue',
     };
     const colorFunc = color[colors[level]] as unknown as (
@@ -74,6 +76,10 @@ export class LoggerService {
 
   public info(category: string, ...data: any) {
     this._logMessage('info', category, ...data);
+  }
+
+  public warn(category: string, ...data: any) {
+    this._logMessage('warn', category, ...data);
   }
 
   public debug(category: string, ...data: any) {

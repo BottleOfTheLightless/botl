@@ -1,45 +1,28 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { marked } from 'marked';
 import { interval } from 'rxjs';
 import { environment } from '../../environments/environment';
-
-interface VersionInfo {
-  dirty: boolean;
-  raw: string;
-  hash: string;
-  distance: number;
-  tag: string;
-  semver: string;
-  suffix: string;
-  semverString: string;
-}
+import { liveVersion, localVersion, versionInfoToSemver } from '../helpers';
+import { LoggerService } from './logger.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MetaService {
-  private versionInfo = signal<VersionInfo>({
-    dirty: false,
-    raw: 'v.local',
-    hash: 'v.local',
-    distance: -1,
-    tag: 'v.local',
-    semver: '',
-    suffix: '',
-    semverString: '',
-  });
-
-  private liveVersionInfo = signal<VersionInfo | undefined>(undefined);
+  private logger = inject(LoggerService);
 
   public versionString = computed(() => {
-    return this.versionInfoToSemver(this.versionInfo());
+    const local = localVersion();
+    if (!local) return '';
+
+    return versionInfoToSemver(local);
   });
 
   public liveVersionString = computed(() => {
-    const live = this.liveVersionInfo();
+    const live = liveVersion();
     if (!live) return '';
 
-    return this.versionInfoToSemver(live);
+    return versionInfoToSemver(live);
   });
 
   public versionMismatch = computed(
@@ -60,9 +43,9 @@ export class MetaService {
     try {
       const response = await fetch('version.json');
       const versionInfo = await response.json();
-      this.versionInfo.set(versionInfo);
+      localVersion.set(versionInfo);
     } catch (e) {
-      console.error('Failed to load version info', e);
+      this.logger.error('Failed to load version info', e);
     }
 
     try {
@@ -70,7 +53,7 @@ export class MetaService {
       const changelogData = await changelog.text();
       this.changelogAll.set(await marked(changelogData));
     } catch {
-      console.error('Could not load changelog (all) - probably on local.');
+      this.logger.error('Could not load changelog (all) - probably on local.');
     }
 
     try {
@@ -78,7 +61,9 @@ export class MetaService {
       const changelogData = await changelog.text();
       this.changelogCurrent.set(await marked(changelogData));
     } catch {
-      console.error('Could not load changelog (current) - probably on local.');
+      this.logger.error(
+        'Could not load changelog (current) - probably on local.',
+      );
     }
 
     interval(15 * 60 * 1000).subscribe(() => {
@@ -92,25 +77,12 @@ export class MetaService {
         'https://subdomain.placeholderdomain.com/version.json',
       );
       const liveVersionData = await liveVersionFile.json();
-      this.liveVersionInfo.set(liveVersionData);
+      liveVersion.set(liveVersionData);
     } catch {
-      console.error(
+      this.logger.error(
         'Could not load live version data. Probably not a big deal.',
       );
     }
-  }
-
-  private versionInfoToSemver(versionInfo: VersionInfo) {
-    if (versionInfo.distance >= 0 && versionInfo.tag) {
-      return `${versionInfo.tag} (${versionInfo.raw})`;
-    }
-
-    return (
-      versionInfo.tag ||
-      versionInfo.semverString ||
-      versionInfo.raw ||
-      versionInfo.hash
-    );
   }
 
   public update() {
