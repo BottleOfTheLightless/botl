@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { formatDate } from '@angular/common';
 import { ErrorHandler, inject, Injectable, signal } from '@angular/core';
+import { color } from 'console-log-colors';
 import { cloneDeep } from 'lodash';
 import Rollbar from 'rollbar';
 import { environment } from '../../environments/environment';
@@ -47,12 +49,39 @@ export class LoggerService {
     }
   }
 
-  public debug(...data: any) {
-    console.debug(...data);
+  private _logMessage(
+    level: 'debug' | 'error' | 'log' | 'info',
+    category: string,
+    ...data: any
+  ) {
+    const colors: Record<typeof level, keyof typeof color> = {
+      debug: 'gray',
+      error: 'red',
+      log: 'magenta',
+      info: 'blue',
+    };
+    const colorFunc = color[colors[level]] as unknown as (
+      str: string,
+    ) => string;
+
+    const timestamp = formatDate(new Date(), 'medium', 'en-US');
+    console[level](colorFunc(`[${timestamp}] {${category}}`), ...data);
   }
 
-  public error(...data: any) {
-    console.error(...data);
+  public log(category: string, ...data: any) {
+    this._logMessage('log', category, ...data);
+  }
+
+  public info(category: string, ...data: any) {
+    this._logMessage('info', category, ...data);
+  }
+
+  public debug(category: string, ...data: any) {
+    this._logMessage('debug', category, ...data);
+  }
+
+  public error(category: string, ...data: any) {
+    this._logMessage('error', category, ...data);
   }
 
   public rollbarError(error: any) {

@@ -1,7 +1,8 @@
-import { HeroPlayer, HeroProgress } from './hero';
+import { HeroPlayer, HeroProgress } from './data-hero';
 import { Branded } from './identifiable';
 
 export type GameId = Branded<string, 'GameId'>;
+export type PlayerId = Branded<string, 'PlayerId'>;
 
 export interface GameStateActiveGame {
   id: GameId;
@@ -9,6 +10,7 @@ export interface GameStateActiveGame {
   lastPlayedAt: number;
 
   act: number;
+  stage: number;
   currentNode: number;
   currentMap: string;
 
@@ -17,7 +19,7 @@ export interface GameStateActiveGame {
 
 export interface GameStateMeta {
   version: number;
-  playerId: string;
+  playerId: PlayerId;
 }
 
 export interface GameState {

@@ -10,7 +10,10 @@ import { IconComponent } from '../../components/icon/icon.component';
 import { AnalyticsClickDirective } from '../../directives/analytics-click.directive';
 import {
   getEntriesByType,
+  getEntry,
+  getHeroProgress,
   isUnlocked,
+  myPlayerId,
   setDiscordStatus,
   startGame,
 } from '../../helpers';
@@ -112,14 +115,22 @@ export class GameSetupCharacterChoiceComponent implements OnInit {
   public play() {
     if (!this.hasEnoughCharacters()) return;
 
-    startGame({
-      slot: 0,
-      heroes: [],
+    const heroData = this.chosenCharacters().map((c) => {
+      const heroDef = getEntry<HeroDefinition>(c!.id)!;
+
+      return {
+        ...heroDef,
+        controlledBy: myPlayerId(),
+        progress: getHeroProgress(heroDef.id)!,
+
+        hp: heroDef.stats.hp ?? 50,
+      };
     });
 
-    // TODO: add the players, when loading, put the game id localstorage if one is currently being played (clear when going to main menu)
-    // TODO: add resume game option
-    // TODO: hook into the input service
+    startGame({
+      slot: 0,
+      heroes: heroData,
+    });
 
     this.router.navigate(['/transition'], {
       queryParams: {

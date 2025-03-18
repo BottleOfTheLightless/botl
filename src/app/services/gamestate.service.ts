@@ -31,7 +31,7 @@ export class GamestateService {
   constructor() {
     effect(() => {
       if (!this.contentService.hasLoaded() || this.hasLoaded()) return;
-      console.log('[Gamestate] Migrating gamestate...');
+      this.logger.log('GameState', 'Migrating gamestate...');
 
       migrateGameState();
       migrateOptionsState();
@@ -39,7 +39,7 @@ export class GamestateService {
 
       unlockDefaultItems();
 
-      console.log('[Gamestate] Gamestate migrated & loaded.');
+      this.logger.log('GameState', 'Gamestate migrated & loaded.');
       this.hasLoaded.set(true);
       isGameStateReady.set(true);
     });
@@ -48,10 +48,9 @@ export class GamestateService {
       if (!this.hasLoaded()) return;
 
       const state = gamestate();
-      console.log(state);
 
       if (getOption('debugConsoleLogStateUpdates')) {
-        console.info('[State Update]', state);
+        this.logger.debug('GameState Update', state);
       }
 
       this.saveGamestate(state);

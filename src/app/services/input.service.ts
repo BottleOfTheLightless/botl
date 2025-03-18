@@ -1,34 +1,91 @@
-import { Injectable } from '@angular/core';
-import { Command, HeroPlayer, NetworkPlayer } from '../interfaces';
+import { effect, inject, Injectable } from '@angular/core';
+import { CommandInput, currentGame } from '../helpers';
+import { Command, HeroPlayer, PlayerId } from '../interfaces';
+import { ContentService } from './content.service';
+import { LoggerService } from './logger.service';
 
-type PlayerId = 1 | 2 | 3 | 4;
+type PlayerSlot = 0 | 1 | 2 | 3;
 
 @Injectable({
   providedIn: 'root',
 })
 export class InputService {
-  public playerMap: Record<PlayerId, NetworkPlayer | undefined> = {
+  private contentService = inject(ContentService);
+  private logger = inject(LoggerService);
+
+  private slotToPlayerId: Record<PlayerSlot, PlayerId | undefined> = {
+    0: undefined,
     1: undefined,
     2: undefined,
     3: undefined,
-    4: undefined,
   };
-  public playerControllingHeroes: Record<PlayerId, HeroPlayer | undefined> = {
+
+  private slotToPlayerData: Record<PlayerSlot, HeroPlayer | undefined> = {
+    0: undefined,
     1: undefined,
     2: undefined,
     3: undefined,
-    4: undefined,
   };
+
+  constructor() {
+    effect(() => {
+      const isContentLoaded = this.contentService.hasLoaded();
+      const game = currentGame();
+      if (!game || !isContentLoaded || this.hasRegisteredPlayers()) return;
+
+      game.heroes.forEach((hero, index) => {
+        this.registerPlayer(index as PlayerSlot, hero.controlledBy, hero);
+      });
+    });
+  }
+
+  init() {}
+
+  public hasRegisteredPlayers() {
+    return Object.values(this.slotToPlayerId).some((id) => id !== undefined);
+  }
+
+  public clearPlayers() {
+    this.slotToPlayerId = {
+      0: undefined,
+      1: undefined,
+      2: undefined,
+      3: undefined,
+    };
+
+    this.slotToPlayerData = {
+      0: undefined,
+      1: undefined,
+      2: undefined,
+      3: undefined,
+    };
+  }
 
   public registerPlayer(
+    playerSlot: PlayerSlot,
     playerId: PlayerId,
-    player: NetworkPlayer,
     hero: HeroPlayer,
-  ) {}
+  ) {
+    this.slotToPlayerId[playerSlot] = playerId;
+    this.slotToPlayerData[playerSlot] = hero;
 
-  public handleInput(playerId: PlayerId, command: Command) {}
+    this.logger.info(
+      `Input`,
+      `Player ${playerId} registered in slot ${playerSlot} as ${hero.name}`,
+    );
+  }
 
-  public sendInput(playerId: PlayerId, command: Command) {}
+  // handle receiving an input from a player, possibly over a network
+  public handleInput(playerId: PlayerId, command: Command) {
+    this.logger.info(`Input`, `Received command from ${playerId}`, command);
+  }
 
-  public convertCommandFromPlayerToHero(playerId: PlayerId, command: Command) {}
+  // handle sending an input to a player, possibly over a network
+  public sendInput(playerId: PlayerId, command: Command) {
+    this.logger.info(`Input`, `Sending command from ${playerId}`, command);
+  }
+
+  public convertCommandFromPlayerToHero(playerId: PlayerId, command: Command) {
+    CommandInput.next({ ...command, playerId });
+  }
 }

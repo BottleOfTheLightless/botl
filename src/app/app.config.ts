@@ -30,6 +30,7 @@ import { AnalyticsService } from './services/analytics.service';
 import { APIService } from './services/api.service';
 import { ContentService } from './services/content.service';
 import { GamestateService } from './services/gamestate.service';
+import { InputService } from './services/input.service';
 import { LoggerService, RollbarErrorHandler } from './services/logger.service';
 import { MetaService } from './services/meta.service';
 import { NotifyService } from './services/notify.service';
@@ -80,10 +81,12 @@ export const appConfig: ApplicationConfig = {
         const meta = inject(MetaService);
         const logger = inject(LoggerService);
         const analytics = inject(AnalyticsService);
+        const input = inject(InputService);
 
         await meta.init();
         logger.init();
         analytics.init();
+        input.init();
       },
     },
     {

@@ -6,6 +6,7 @@ import { allContentById } from './content';
 export function blankUnlockState(): UnlockState {
   return {
     hero: {},
+    map: {},
   };
 }
 

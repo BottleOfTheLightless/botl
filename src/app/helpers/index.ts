@@ -4,6 +4,7 @@ export * from './discord';
 export * from './game-init';
 export * from './gameloop';
 export * from './icons';
+export * from './input';
 export * from './map';
 export * from './migrate';
 export * from './notify';

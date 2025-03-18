@@ -1,4 +1,4 @@
-export type ContentType = 'hero';
+export type ContentType = 'hero' | 'map';
 
 export interface Identifiable {
   id: string;

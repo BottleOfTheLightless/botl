@@ -1,4 +1,5 @@
-import { Branded, Identifiable } from './identifiable';
+import { Branded, Content } from './identifiable';
+import { PlayerId } from './state-game';
 
 export type HeroId = Branded<string, 'HeroId'>;
 
@@ -8,7 +9,7 @@ export interface HeroStats {
   hp: number;
 }
 
-export interface HeroDefinition extends Identifiable {
+export interface HeroDefinition extends Content {
   id: HeroId;
   name: string;
   description: string;
@@ -27,7 +28,7 @@ export interface HeroDefinition extends Identifiable {
 export interface HeroProgress {}
 
 export interface HeroPlayer extends HeroDefinition {
-  controlledBy: string;
+  controlledBy: PlayerId;
   progress: HeroProgress;
 
   hp: number;

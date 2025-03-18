@@ -1,6 +1,8 @@
 import { Signal, signal, WritableSignal } from '@angular/core';
 import { sortBy } from 'lodash';
-import { TiledMap, TiledMapNode } from '../interfaces';
+import { MapDefinition, TiledMap, TiledMapNode } from '../interfaces';
+import { getEntriesByType } from './content';
+import { currentGame } from './game-init';
 
 const _allMapsByName: WritableSignal<Map<string, TiledMap>> = signal(new Map());
 export const allMapsByName: Signal<Map<string, TiledMap>> =
@@ -24,4 +26,10 @@ export function getPropertyFromMap(
   }
 
   return undefined;
+}
+
+export function currentMapData() {
+  return getEntriesByType<MapDefinition>('map').find(
+    (m) => m.name === currentGame()?.currentMap,
+  );
 }

@@ -1,13 +1,13 @@
 import { Signal, signal, WritableSignal } from '@angular/core';
 import { cloneDeep } from 'lodash';
-import { GameState } from '../interfaces';
+import { GameState, PlayerId } from '../interfaces';
 import { uuid } from './rng';
 
 export function blankGameState(): GameState {
   return {
     meta: {
       version: 1,
-      playerId: uuid(),
+      playerId: uuid() as PlayerId,
     },
     activeGameSlot: 0,
     activeGames: [],
@@ -27,4 +27,8 @@ export function setGameState(state: GameState): void {
 export function updateGamestate(func: (state: GameState) => GameState): void {
   const newState = func(gamestate());
   setGameState(newState);
+}
+
+export function myPlayerId(): PlayerId {
+  return gamestate().meta.playerId;
 }

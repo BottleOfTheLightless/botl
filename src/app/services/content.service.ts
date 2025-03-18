@@ -6,7 +6,7 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import {
   allContentById,
   allIdsByName,
@@ -15,6 +15,7 @@ import {
   setAllMapsByName,
 } from '../helpers';
 import { Content, ContentType, TiledMap } from '../interfaces';
+import { LoggerService } from './logger.service';
 import { MetaService } from './meta.service';
 
 @Injectable({
@@ -22,6 +23,7 @@ import { MetaService } from './meta.service';
 })
 export class ContentService {
   private metaService = inject(MetaService);
+  private logger = inject(LoggerService);
   private http = inject(HttpClient);
 
   private artSignals: Array<WritableSignal<boolean>> = [];
@@ -124,7 +126,7 @@ export class ContentService {
           maps.set(allMaps[idx], mapData);
         });
 
-        console.log('[Content] Maps loaded.');
+        this.logger.log('Content', 'Map JSONs loaded.');
         setAllMapsByName(maps);
         this.hasLoadedMaps.set(true);
       });
@@ -132,12 +134,17 @@ export class ContentService {
   }
 
   private loadJSON() {
-    forkJoin({
-      hero: this.http.get(this.toJSONURL('hero')),
-    }).subscribe((assets) => {
+    const allJsons = ['hero', 'map'];
+
+    const jsonMaps = allJsons.reduce((prev, cur) => {
+      prev[cur] = this.http.get<Content[]>(this.toJSONURL(cur));
+      return prev;
+    }, {} as Record<string, Observable<Content[]>>);
+
+    forkJoin(jsonMaps).subscribe((assets) => {
       this.unfurlAssets(assets as unknown as Record<string, Content[]>);
 
-      console.log('[Content] Content loaded.');
+      this.logger.log('Content', 'Content loaded.');
       this.hasLoadedData.set(true);
     });
   }
