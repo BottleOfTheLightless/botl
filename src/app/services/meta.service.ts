@@ -45,7 +45,7 @@ export class MetaService {
       const versionInfo = await response.json();
       localVersion.set(versionInfo);
     } catch (e) {
-      this.logger.error('Failed to load version info', e);
+      this.logger.error('Meta:Version', 'Failed to load version info', e);
     }
 
     try {
@@ -53,7 +53,10 @@ export class MetaService {
       const changelogData = await changelog.text();
       this.changelogAll.set(await marked(changelogData));
     } catch {
-      this.logger.error('Could not load changelog (all) - probably on local.');
+      this.logger.error(
+        'Meta:Changelog',
+        'Could not load changelog (all) - probably on local.',
+      );
     }
 
     try {
@@ -62,6 +65,7 @@ export class MetaService {
       this.changelogCurrent.set(await marked(changelogData));
     } catch {
       this.logger.error(
+        'Meta:Changelog',
         'Could not load changelog (current) - probably on local.',
       );
     }
@@ -80,6 +84,7 @@ export class MetaService {
       liveVersion.set(liveVersionData);
     } catch {
       this.logger.error(
+        'Meta:Version',
         'Could not load live version data. Probably not a big deal.',
       );
     }
