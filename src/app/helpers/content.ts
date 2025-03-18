@@ -18,9 +18,12 @@ export function setAllContentById(state: Map<string, Content>): void {
 }
 
 export function getEntriesByType<T>(type: ContentType): T[] {
-  return [...allContentById()]
-    .filter(([_, entry]) => entry.__type === type)
-    .map((e) => e[1]) as T[];
+  return (
+    [...allContentById()]
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      .filter(([_, entry]) => entry.__type === type)
+      .map((e) => e[1]) as T[]
+  );
 }
 
 export function getEntry<T extends Content>(
