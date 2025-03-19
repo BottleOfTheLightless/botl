@@ -15,6 +15,7 @@ export interface GameStateActiveGame {
   currentMap: string;
 
   heroes: HeroPlayer[];
+  waitingFor: PlayerId[];
 }
 
 export interface GameStateMeta {

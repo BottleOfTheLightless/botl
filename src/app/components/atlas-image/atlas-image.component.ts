@@ -7,6 +7,7 @@ type AtlasedImage =
   | 'item-accessory'
   | 'item-weapon'
   | 'map-node'
+  | 'map-node-editor'
   | 'picker-hero';
 
 @Component({
@@ -20,7 +21,7 @@ export class AtlasImageComponent {
 
   public spritesheet = input.required<AtlasedImage>();
   public assetName = input.required<string>();
-  public cssClass = input<string>();
+  public cssClass = input<string>('');
 
   public assetUrl = computed(
     () => `art/spritesheets/${this.spritesheet()}.png`,

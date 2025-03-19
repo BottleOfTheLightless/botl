@@ -9,6 +9,7 @@ const spritesheetsToBuild = [
   'item-accessory',
   'item-weapon',
   'map-node',
+  'map-node-editor',
   'picker-hero',
 ];
 

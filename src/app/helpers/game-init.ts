@@ -5,6 +5,7 @@ import {
   HeroDefinition,
   HeroPlayer,
   HeroProgress,
+  PlayerId,
   TiledMap,
   TiledMapNode,
   TiledMapNodeType,
@@ -36,6 +37,7 @@ export function newGame(): GameStateActiveGame {
     currentNode: 0,
     currentMap: '',
     heroes: [],
+    waitingFor: [],
   };
 }
 
@@ -120,5 +122,12 @@ export function ensureAllHeroesHaveProgress(): void {
     if (progress) return;
 
     setHeroProgress(hero.id, {});
+  });
+}
+
+export function waitFor(ids: PlayerId[]): void {
+  updateCurrentGame((game) => {
+    game.waitingFor = ids;
+    return game;
   });
 }

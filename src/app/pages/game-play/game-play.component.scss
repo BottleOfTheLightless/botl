@@ -1,0 +1,27 @@
+:host {
+  --page-width: 2880;
+  --page-height: 1600;
+}
+
+.scaled-to-page {
+  transform-origin: top left;
+  transform: scale(var(--page-scale-x), var(--page-scale-y));
+
+  .scaled {
+    display: block;
+    width: calc(var(--page-width) * 1px);
+    height: calc(var(--page-height) * 1px);
+  }
+}
+
+.should-layer {
+  position: absolute;
+}
+
+app-game-map {
+  z-index: 10;
+}
+
+app-game-map-nodes {
+  z-index: 20;
+}

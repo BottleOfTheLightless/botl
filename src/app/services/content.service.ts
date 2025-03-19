@@ -69,6 +69,7 @@ export class ContentService {
       'item-accessory',
       'item-weapon',
       'map-node',
+      'map-node-editor',
       'picker-hero',
     ];
 

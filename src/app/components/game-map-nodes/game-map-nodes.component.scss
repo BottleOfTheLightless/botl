@@ -1,0 +1,9 @@
+.map-node {
+  position: absolute;
+}
+
+svg {
+  user-select: none;
+  pointer-events: none;
+  z-index: 0;
+}

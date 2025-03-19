@@ -1,0 +1,7 @@
+<div #svgContainer></div>
+
+@for(node of mapNodes(); track $index) {
+<div class="map-node" [style.left.px]="node.x" [style.top.px]="node.y" [id]="`node-${node.id}`">
+  <app-atlas-image [spritesheet]="'map-node-editor'" [assetName]="node.nodeImage"></app-atlas-image>
+</div>
+}

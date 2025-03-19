@@ -3,6 +3,10 @@
   max-height: 100vh;
 
   @apply overflow-y-auto overflow-x-hidden;
+
+  &.playing {
+    @apply overflow-hidden;
+  }
 }
 
 .page-size {
