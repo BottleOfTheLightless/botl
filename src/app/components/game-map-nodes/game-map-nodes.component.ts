@@ -41,18 +41,15 @@ export class GameMapNodesComponent {
   public allArrows = signal<ArrowLine[]>([]);
 
   public mapNodes = computed(() =>
-    (currentMapNodes() ?? []).map(
-      (node) =>
-        ({
-          id: node.id,
-          name: node.name,
-          type: node.type,
-          nodeImage: 'Encounter1',
-          x: node.x,
-          y: node.y,
-          nextNodes: (getPropertyFromMap(node, 'nextNode') as number[]) ?? [],
-        } satisfies ClickableMapNode),
-    ),
+    (currentMapNodes() ?? []).map<ClickableMapNode>((node) => ({
+      id: node.id,
+      name: node.name,
+      type: node.type,
+      nodeImage: 'Encounter1',
+      x: node.x,
+      y: node.y,
+      nextNodes: (getPropertyFromMap(node, 'nextNode') as number[]) ?? [],
+    })),
   );
 
   constructor() {

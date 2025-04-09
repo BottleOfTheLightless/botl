@@ -7,6 +7,7 @@ export * from './icons';
 export * from './input';
 export * from './map';
 export * from './migrate';
+export * from './network-player';
 export * from './notify';
 export * from './rng';
 export * from './setup';

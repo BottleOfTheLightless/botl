@@ -8,11 +8,12 @@ import {
 } from '@angular/core';
 import { GameMapNodesComponent } from '../../components/game-map-nodes/game-map-nodes.component';
 import { GameMapComponent } from '../../components/game-map/game-map.component';
+import { GamePlayerListComponent } from '../../components/game-player-list/game-player-list.component';
 import { uiScaleX, uiScaleY } from '../../helpers';
 
 @Component({
   selector: 'app-game-play',
-  imports: [GameMapComponent, GameMapNodesComponent],
+  imports: [GameMapComponent, GameMapNodesComponent, GamePlayerListComponent],
   templateUrl: './game-play.component.html',
   styleUrl: './game-play.component.scss',
 })

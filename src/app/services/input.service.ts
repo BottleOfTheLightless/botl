@@ -46,6 +46,10 @@ export class InputService {
 
   init() {}
 
+  public playerIdInSlot(slot: PlayerSlot): PlayerId | undefined {
+    return this.slotToPlayerId[slot];
+  }
+
   public hasRegisteredPlayers() {
     return Object.values(this.slotToPlayerId).some((id) => id !== undefined);
   }

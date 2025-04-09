@@ -1,8 +1,3 @@
-:host {
-  --page-width: 2880;
-  --page-height: 1600;
-}
-
 .scaled-to-page {
   transform-origin: top left;
   transform: scale(var(--page-scale-x), var(--page-scale-y));
@@ -24,4 +19,13 @@ app-game-map {
 
 app-game-map-nodes {
   z-index: 20;
+}
+
+app-game-player-list {
+  z-index: 100;
+
+  left: 20px;
+  top: 70px;
+
+  transform: scale(1, 0.8);
 }

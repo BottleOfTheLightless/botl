@@ -1,0 +1,5 @@
+<div class="player-list flex flex-col gap-2">
+  @for(playerSlot of playerSlots; track $index) {
+  <app-game-player-list-entry [slot]="playerSlot"></app-game-player-list-entry>
+  }
+</div>
