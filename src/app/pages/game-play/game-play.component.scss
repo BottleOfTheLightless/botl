@@ -1,3 +1,7 @@
+:host {
+  @apply block bg-black w-full h-full;
+}
+
 .scaled-to-page {
   transform-origin: top left;
   transform: scale(var(--page-scale-x), var(--page-scale-y));
@@ -24,8 +28,8 @@ app-game-map-nodes {
 app-game-player-list {
   z-index: 100;
 
-  left: 20px;
-  top: 70px;
+  left: -20px;
+  top: -20px;
 
-  transform: scale(1, 0.8);
+  transform: scale(0.7);
 }
